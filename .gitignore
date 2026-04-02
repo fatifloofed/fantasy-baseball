@@ -1,37 +1,279 @@
-# Local .terraform directories
-.terraform/
+# General OS generated files #
+#################################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.AppleDouble
+.LSOverride
 
-# .tfstate files
-*.tfstate
-*.tfstate.*
+# Editors (VS Code, Sublime Text, etc.) #
+#########################################
+.vscode/
+.vs/
+*.sublime-project
+*.sublime-workspace
+.idea/ # Covers .idea/*
+*.project
+*.ipr
+*.iws
+.ropeproject/
 
-# Crash log files
-crash.log
-crash.*.log
+# Generic Build/Output/Temporary Files #
+# These are common across many languages/tools
+################################################
+# Build output directories
+build/
+dist/
+out/
+target/
+bin/
 
-# Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version 
-# control as they are data points which are potentially sensitive and subject 
-# to change depending on the environment.
-# *.tfvars
-*.tfvars.json
+# Log files and directories
+*.log
+log/
+logs/
 
-# Ignore override files as they are usually used to override resources locally and so
-# are not checked in
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+~$*
 
-# Ignore transient lock info files created by terraform apply
-.terraform.tfstate.lock.info
+# Executables / Compiled output (generic)
+*.exe
+*.out
 
-# Include override files you do wish to add to version control using negated pattern
-# !example_override.tf
+# Cache files
+.cache/
+*.cachefile
 
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
+# Coverage reports (generic names)
+.coverage
+coverage/
+htmlcov/
 
-# Ignore CLI configuration files
-.terraformrc
-terraform.rc
+# Compressed package files (generic if not tool-specific)
+# Add if you generate these and don't want to commit
+# *.zip, *.tar.gz etc. 
+
+# Visual Studio generated files #
+#################################
+# Note: Some generic patterns like *.log, *.tmp, bin/ were moved to Generic section
+*.suo
+*.user
+*.opensdf
+*.vssscc
+*.vspscc
+*.uncompressed.pak
+[Bb]in/
+[Oo]bj/
+_ReSharper*/
+*.csproj.vspscc
+*.DotSettings.user
+*.VC.db
+*.VC.VC.opendb
+*.VC.opendb
+*.rsuser
+*.tlog
+*.svclog
+*.lastcodeanalysissucceeded
+*.autosave
+*.build.inc
+*.psess
+*.vspx
+*.dtsx
+*.vstemplate
+*.sap
+*.nupkg
+*.vsmdi
+*.testsettings
+*.mstest
+*.vslogs
+*.snk
+*.pfx
+*.cer
+*.pubxml
+*.pid
+*.dump
+
+# .NET #
+#########
+*.sln.docstates
+*.rpt
+
+# Java generated files #
+#########################
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# Rust generated files #
+#########################
+# IMPORTANT: Cargo.lock should generally be committed. Removed from ignore.
+# Cargo.lock
+
+# YAML generated files #
+#########################
+# No specific YAML generated files to ignore at the moment,
+# but you may want to ignore backups (covered by generic *.bak):
+# *.yaml.bak # Covered by generic *.bak
+# *.yml.bak # Covered by generic *.bak
+
+# Dart/Flutter generated files #
+#################################
+.dart_tool/
+.packages
+*.freezed.dart
+*.g.dart
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+android/.gradle
+android/build/
+**/Pods
+**/Podfile.lock
+**/DerivedData
+
+# Go generated files #
+#######################
+pkg/
+*.test
+*.gc
+
+# Python generated files #
+##########################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging (some moved to Generic)
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports (some moved to Generic)
+.tox/
+.nox/
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PEP 582; __pypackages__ directory
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments (virtual environments)
+.venv
+env/
+venv/
+ENV/
+env.bak
+venv.bak
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# mkdocs documentation
+/site/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# profiling and linting
+*.prof
+*.pstats
+.pylintrc
+pylint.log
+
+# Instance folder for Flask
+instance/
+.webassets-cache
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Database files (often local dev, not for prod db files)
+*.sqlite3
+*.db3
+
+# Docker related #
+##################
+docker-compose.override.yml
+docker-compose.prod.yml
+.dockerenv
+
+# Node.js/npm related #
+########################
+node_modules/
+.pnpm/
+# IMPORTANT: Lock files ensure reproducible builds and should generally be committed.
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Environment variable files #
+# (Kept separate as they are sensitive but have a common pattern)
+################################
+.env
+.env.*
+!/.env.example
+
+# Other common files #
+######################
+# Most items from here were moved to the Generic section or OS specific.
+.history
+
+# --- IMPORTANT NOTE ON LOCK FILES ---
+# Files like package-lock.json (npm), yarn.lock (Yarn), pnpm-lock.yaml (pnpm),
+# Cargo.lock (Rust), Pipfile.lock (pipenv), poetry.lock (Poetry)
+# are generally RECOMMENDED to be committed to your repository.
+# They ensure that everyone on the team and your CI/CD systems
+# get the exact same versions of dependencies, leading to reproducible builds.
+# Only ignore them if you have a very specific reason.

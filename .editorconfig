@@ -1,0 +1,108 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+# === General Files ===
+[*.{md,txt,LICENSE,CHANGELOG,AUTHORS,NOTICE}]
+indent_style = space
+indent_size = 2
+
+# === Dotnet ===
+[*.{cs,vb,csproj,vbproj,sln,json,config,editorconfig}]
+indent_style = space
+indent_size = 4
+
+# === Java ===
+[*.java]
+indent_style = space
+indent_size = 4
+
+# === Rust ===
+[*.rs]
+indent_style = space
+indent_size = 4
+
+# === YAML ===
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# === Git ===
+[*.gitignore]
+indent_style = space
+indent_size = 2
+
+# === Dart/Flutter ===
+[*.dart]
+indent_style = space
+indent_size = 2
+
+# === Go ===
+[*.go]
+indent_style = tab # Go's standard is to use tabs for indentation.
+indent_size = 4  # Some editors might interpret tabs as 4 spaces. This can be adjusted.
+
+# === Python ===
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 79 # PEP 8 suggests 79, but modern tools/screens often use 88 (Black default) or 99.
+tab_width = 4
+
+# === Docker ===
+[Dockerfile]
+indent_style = space
+indent_size = 4
+
+# === CODEOWNERS ===
+[CODEOWNERS]
+indent_style = space
+indent_size = 2
+
+# === Common repository files ===
+[*.{Makefile,mk}]
+indent_style = tab
+
+[*.{sh,bash,zsh}]
+indent_style = space
+indent_size = 2
+
+[*.{sql,psql}]
+indent_style = space
+indent_size = 2
+
+[*.{html,htm,css,js}]
+indent_style = space
+indent_size = 2
+
+# Override for Javascript in JSON files (for package.json and similar)
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Override for specific files where tabs are preferred (e.g., Makefiles, some config files)
+[Makefile]
+indent_style = tab
+indent_size = 8 # Adjust tab width as needed
+
+[*.{gradle,kts}] # Gradle (Kotlin DSL)
+indent_style = space
+indent_size = 4
+
+[*.{properties,env}]
+indent_style = space
+indent_size = 2
+
+# Allow project-specific overrides. This is important!
+# It allows for fine-grained control within subdirectories.
+
+# Example:  Within a specific directory, you can create another .editorconfig file
+# to override the settings defined here for files in that directory.

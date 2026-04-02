@@ -1,0 +1,92 @@
+default:
+  image: PRA2redcedar.gitlab.rcbc.ygc.inet:5050/rcbc/shared-services/runner-container-images/runner-terraform-tofu:v1.1.0
+  tags:
+    - runner-global
+    - docker
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .terraform/
+      - .terraform.lock.hcl
+
+include:
+  - project: rcbc/shared-services/devsecops/pipeline-coe
+    ref: v6.8.0
+    file:
+      - Pipeline.gitlab-ci.yml
+
+workflow:
+  rules:
+    # prevent tagging in pipeline from triggering another pipeline
+    - if: "$CI_COMMIT_TAG"
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH == "dev"'
+      variables:
+        ENVIRONMENT: "dev"
+        # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH == "uat"'
+      variables:
+        ENVIRONMENT: "uat"
+        # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+      variables:
+        ENVIRONMENT: "prod"
+        # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      variables:
+        ENVIRONMENT: "prod"
+        # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
+
+# Default variables must be set
+variables:
+  # Toggle which tool to use: terraform | tofu
+  TF_TOOL: "tofu"
+  # Default working directory and state name
+  TF_STATE_NAME: "$ENVIRONMENT-tfstate"
+
+stages:
+  - pre-build
+  - build
+  - deploy
+
+tf-init:
+  stage: pre-build
+  extends: .tf-init
+  # before_script:
+  #   - !reference [.aws-assume-workload-account-role, before_script]
+
+tf-validate:
+  stage: pre-build
+  extends: .tf-validate
+  # before_script:
+  #   - !reference [.aws-assume-workload-account-role, before_script]
+  # allow_failure: true
+
+tf-fmt:
+  stage: pre-build
+  extends: .tf-fmt
+  # before_script:
+  #   - !reference [.aws-assume-workload-account-role, before_script]
+
+tflint:
+  stage: pre-build
+  extends: .tflint
+  allow_failure: true
+
+tf-plan:
+  stage: build
+  extends: .tf-plan
+  # before_script:
+  #   - !reference [.aws-assume-workload-account-role, before_script]
+  variables:
+    TF_PLAN_FILE_NAME: "$ENVIRONMENT-tfplan"
+    TF_PLAN_ADDITIONAL_PARAMETERS: "-var-file=values/$ENVIRONMENT.tfvars"
+
+tf-apply:
+  stage: deploy
+  extends: .tf-apply
+  # before_script:
+  #   - !reference [.aws-assume-workload-account-role, before_script]
+  variables:
+    TF_PLAN_FILE_NAME: "$ENVIRONMENT-tfplan"
+    TF_PLAN_ADDITIONAL_PARAMETERS: "-var-file=values/$ENVIRONMENT.tfvars"

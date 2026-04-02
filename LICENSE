@@ -1,0 +1,73 @@
+# RCBC Proprietary and Confidential License Agreement
+
+This is a legally binding agreement between Rizal Commercial Banking Corporation (RCBC) and any individual or entity (hereinafter referred to as "Recipient") accessing, using, or possessing the software, code, binaries, documentation, or development tools (hereinafter referred to as "RCBC Materials") provided by RCBC.
+
+BY ACCESSING, USING, OR POSSESSING THE RCBC MATERIALS, THE RECIPIENT AGREES TO BE BOUND BY THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT. IF THE RECIPIENT DOES NOT AGREE TO THESE TERMS, THE RECIPIENT MUST IMMEDIATELY CEASE ACCESSING, USING, OR POSSESSING THE RCBC MATERIALS AND RETURN OR DESTROY ALL COPIES THEREOF.
+
+1.  **License Grant:**
+
+    RCBC grants the Recipient a limited, non-exclusive, non-transferable, revocable license to use the RCBC Materials solely for the purposes expressly authorized in writing by RCBC.  This license is strictly limited to internal use within RCBC's organization and/or by employees, contractors, or agents *directly* working *on behalf* of RCBC and *under the direct control* of RCBC for projects explicitly approved by RCBC.
+
+2.  **Restrictions:**
+
+    THE RECIPIENT IS EXPRESSLY PROHIBITED FROM:
+
+    *   **Copying, reproducing, distributing, or disclosing the RCBC Materials to any third party vendors, individuals, or entities outside of RCBC, without the express written consent of RCBC's Chief Technology Officer (CTO) or an authorized representative.**  For clarity, this includes any vendors, subcontractors, consultants, or other external parties not directly employed by RCBC.
+    *   **Modifying, reverse engineering, decompiling, or disassembling the RCBC Materials, except to the extent expressly permitted by applicable law, and only after providing RCBC with written notice and a reasonable opportunity to review and approve such actions.**
+    *   **Creating derivative works based on the RCBC Materials.**
+    *   **Using the RCBC Materials for any purpose not expressly authorized by RCBC.**
+    *   **Removing, altering, or obscuring any copyright, trademark, or other proprietary notices contained in the RCBC Materials.**
+    *   **Sublicensing, renting, leasing, or otherwise transferring any rights in the RCBC Materials.**
+    *   **Using the RCBC Materials in violation of any applicable laws or regulations.**
+    *   **Storing, transmitting, or otherwise handling the RCBC Materials in a manner that could compromise their confidentiality or security.**
+    *   **Allowing third-party vendors or consultants to access or utilize RCBC development environments or systems where RCBC Materials reside, without explicit written permission from RCBC's Information Security Officer (ISO) or an authorized representative.**
+
+3.  **Ownership:**
+
+    RCBC retains all right, title, and interest in and to the RCBC Materials, including all intellectual property rights.  The Recipient acknowledges that the RCBC Materials are proprietary and confidential to RCBC.
+
+4.  **Confidentiality:**
+
+    The Recipient shall hold the RCBC Materials in strict confidence and shall take all reasonable precautions to protect them from unauthorized access, use, or disclosure. The Recipient shall implement appropriate security measures to prevent the unauthorized use or disclosure of the RCBC Materials.
+
+5.  **Termination:**
+
+    RCBC may terminate this License Agreement at any time, with or without cause, upon written notice to the Recipient.  Upon termination, the Recipient shall immediately cease all use of the RCBC Materials and shall return or destroy all copies thereof, certifying in writing to RCBC that all copies have been returned or destroyed.
+
+6.  **Disclaimer of Warranty:**
+
+    THE RCBC MATERIALS ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  RCBC DOES NOT WARRANT THAT THE RCBC MATERIALS WILL BE ERROR-FREE OR THAT THEY WILL MEET THE RECIPIENT'S REQUIREMENTS.
+
+7.  **Limitation of Liability:**
+
+    IN NO EVENT SHALL RCBC BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATING TO THE USE OR INABILITY TO USE THE RCBC MATERIALS, EVEN IF RCBC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. RCBC'S TOTAL LIABILITY UNDER THIS AGREEMENT SHALL NOT EXCEED ONE HUNDRED U.S. DOLLARS ($100).
+
+8.  **Governing Law:**
+
+    This License Agreement shall be governed by and construed in accordance with the laws of the Republic of the Philippines, without regard to its conflict of laws principles.
+
+9.  **Entire Agreement:**
+
+    This License Agreement constitutes the entire agreement between RCBC and the Recipient with respect to the RCBC Materials and supersedes all prior or contemporaneous communications and proposals, whether oral or written.
+
+10. **Severability:**
+
+    If any provision of this License Agreement is held to be invalid or unenforceable, such provision shall be struck and the remaining provisions shall remain in full force and effect.
+
+11. **Waiver:**
+
+    No waiver of any provision of this License Agreement shall be effective unless in writing and signed by an authorized representative of RCBC.
+
+12. **Contact Information:**
+
+    For any questions regarding this License Agreement, please contact:
+
+    [Name]
+    [Designation]
+    [Group]
+    [Role]
+    Rizal Commercial Banking Corporation
+    Yuchenco Tower, RCBC Plaza, 6819, Ayala Avenue, Makati City
+    [Email]
+
+BY ACCESSING, USING, OR POSSESSING THE RCBC MATERIALS, THE RECIPIENT ACKNOWLEDGES THAT THEY HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT.

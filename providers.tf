@@ -6,12 +6,12 @@ terraform {
       version = "< 6.0"
     }
   }
-  required_version = "~> 1.14"
+  required_version = "< 6.0"
   backend "local" {}
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "eu-west-1"
   assume_role {
     role_arn = var.assume_role_arn
   }
@@ -24,6 +24,9 @@ provider "aws" {
       Environment  = upper(var.environment)
       BU           = var.tags_BU
       IT           = var.tags_IT
+      Tier         = var.tags_tier
+      Automation   = var.tags_automation
+      Schedule     = var.tags_sched
     }
   }
 }
