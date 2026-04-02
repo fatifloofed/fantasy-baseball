@@ -1,30 +1,21 @@
 default:
-  image: PRA2redcedar.gitlab.rcbc.ygc.inet:5050/rcbc/shared-services/runner-container-images/runner-terraform-tofu:v1.1.0
-  tags:
-    - runner-global
-    - docker
+  image: hashicorp/terraform:v1.14.6
   cache:
     key: "${CI_COMMIT_REF_SLUG}"
     paths:
       - .terraform/
       - .terraform.lock.hcl
 
-include:
-  - project: rcbc/shared-services/devsecops/pipeline-coe
-    ref: v6.8.0
-    file:
-      - Pipeline.gitlab-ci.yml
-
 workflow:
   rules:
     # prevent tagging in pipeline from triggering another pipeline
     - if: "$CI_COMMIT_TAG"
       when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH == "dev"'
       variables:
         ENVIRONMENT: "dev"
         # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH == "uat"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH == "uat"'
       variables:
         ENVIRONMENT: "uat"
         # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
@@ -37,10 +28,9 @@ workflow:
         ENVIRONMENT: "prod"
         # WORKLOAD_ROLE: "arn:aws:iam::123456789012:role/replace-with-valid-arn"
 
-# Default variables must be set
+
 variables:
-  # Toggle which tool to use: terraform | tofu
-  TF_TOOL: "tofu"
+  TF_TOOL: "terraform"
   # Default working directory and state name
   TF_STATE_NAME: "$ENVIRONMENT-tfstate"
 
@@ -49,44 +39,124 @@ stages:
   - build
   - deploy
 
+
 tf-init:
   stage: pre-build
-  extends: .tf-init
-  # before_script:
-  #   - !reference [.aws-assume-workload-account-role, before_script]
+  variables:
+    TF_INIT_ADDITIONAL_PARAMETERS: null
+  script:
+    - |
+      set -e
+
+      echo "TF_TOOL       = $TF_TOOL"
+      echo "TF_STATE_NAME = $TF_STATE_NAME"
+
+      # Fail fast if state name is missing
+      if [ -z "$TF_STATE_NAME" ]; then
+        echo "❌ ERROR: TF_STATE_NAME is empty"
+        exit 1
+      fi
+      
+      echo "⚡ Initializing $TF_TOOL with explicit backend configuration..."
+      echo "Backend address: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}"
+      $TF_TOOL init -input=false -reconfigure ${TF_INIT_ADDITIONAL_PARAMETERS} \
+        -backend-config="address=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}" \
+        -backend-config="lock_address=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}/lock" \
+        -backend-config="unlock_address=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}/lock" \
+        -backend-config="username=${TF_HTTP_USER}" \
+        -backend-config="password=${TF_HTTP_PW}" \
+        -backend-config="lock_method=POST" \
+        -backend-config="unlock_method=DELETE" \
+        -backend-config="retry_wait_min=5" 
+        # -backend-config="skip_cert_verification=true"
+      echo "✅ Done initializing $TF_TOOL"
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .terraform/
+      - .terraform.lock.hcl
+
+
 
 tf-validate:
   stage: pre-build
-  extends: .tf-validate
-  # before_script:
-  #   - !reference [.aws-assume-workload-account-role, before_script]
-  # allow_failure: true
+  needs:
+    - tf-init
+  dependencies:
+    - tf-init
+  variables:
+    TF_VALIDATE_ADDITIONAL_PARAMETERS: null
+  script:
+    - echo "🔍 Validating $TF_TOOL configuration..."
+    - $TF_TOOL validate ${TF_VALIDATE_ADDITIONAL_PARAMETERS}
+    - echo "✅ Completed $TF_TOOL validation!"
+
 
 tf-fmt:
   stage: pre-build
-  extends: .tf-fmt
-  # before_script:
-  #   - !reference [.aws-assume-workload-account-role, before_script]
+  variables:
+    TF_FMT_ADDITIONAL_PARAMETERS: "-recursive -check -diff"
+  script:
+    - echo "🔍 Checking $TF_TOOL formatting..."
+    - $TF_TOOL fmt ${TF_FMT_ADDITIONAL_PARAMETERS}
+    - echo "✅ Completed $TF_TOOL formatting check!"
+  allow_failure: true
 
 tflint:
   stage: pre-build
-  extends: .tflint
+  image: ghcr.io/terraform-linters/tflint
+  variables:
+    TFLINT_PARAMETERS: "--config=.tflint.hcl"
+  script:
+    - echo "🔍 Initializing TFLint plugins..."
+    - tflint --init ${TFLINT_PARAMETERS}
+    - echo "🔍 Linting $TF_TOOL configuration..."
+    - tflint --chdir=.
+    - echo "✅ Completed $TF_TOOL linting!"
   allow_failure: true
 
 tf-plan:
   stage: build
-  extends: .tf-plan
-  # before_script:
-  #   - !reference [.aws-assume-workload-account-role, before_script]
   variables:
-    TF_PLAN_FILE_NAME: "$ENVIRONMENT-tfplan"
+    TF_PLAN_FILE_NAME: tfplan
     TF_PLAN_ADDITIONAL_PARAMETERS: "-var-file=values/$ENVIRONMENT.tfvars"
+  needs:
+    - tf-validate
+    - tf-fmt
+  script:
+    - echo "🛠️ Building $TF_TOOL plan..."
+    - $TF_TOOL plan -input=false -out=${TF_PLAN_FILE_NAME} ${TF_PLAN_ADDITIONAL_PARAMETERS}
+    - $TF_TOOL show -json ${TF_PLAN_FILE_NAME} | jq '.' > ${TF_PLAN_FILE_NAME}.json
+    - echo "✅ Done building $TF_TOOL plan file!"
+  artifacts:
+    paths:
+      - "*tfplan"
+      - "*tfplan.json"
+    expire_in: 1h
 
 tf-apply:
   stage: deploy
-  extends: .tf-apply
-  # before_script:
-  #   - !reference [.aws-assume-workload-account-role, before_script]
   variables:
-    TF_PLAN_FILE_NAME: "$ENVIRONMENT-tfplan"
-    TF_PLAN_ADDITIONAL_PARAMETERS: "-var-file=values/$ENVIRONMENT.tfvars"
+    TF_HTTP_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}"
+    TF_HTTP_LOCK_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}/lock"
+    TF_HTTP_UNLOCK_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${TF_STATE_NAME}/lock"
+    TF_HTTP_USERNAME: "${TF_HTTP_USER}"
+    TF_HTTP_PASSWORD: "${TF_HTTP_PW}"
+    TF_HTTP_LOCK_METHOD: "POST"
+    TF_HTTP_UNLOCK_METHOD: "DELETE"
+    TF_HTTP_RETRY_WAIT_MIN: "5"
+    TF_PLAN_FILE_NAME: tfplan
+  needs:
+    - tf-plan
+  dependencies:
+    - tf-plan
+  script:
+    - echo "✈️ Applying $TF_TOOL configuration..."
+    - $TF_TOOL apply -input=false -auto-approve $TF_PLAN_FILE_NAME
+  when: manual
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .terraform/
+      - .terraform.lock.hcl
+
